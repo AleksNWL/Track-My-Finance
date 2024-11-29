@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
-import '../src/styles/style.css';
+import { useCookies } from 'react-cookie';
+import './styles/style.css';
 
 function App() {
     const [email, setEmail] = useState('')
@@ -9,6 +10,7 @@ function App() {
     const [emailError, setEmailError] = useState('Почта не может быть пустой!')
     const [passError, setPassError] = useState('Пароль не может быть пустым!')
     const [formValid, setFormValid] = useState(false)
+    const [cookies, setCookie] = useCookies(['userToken'])
 
     useEffect(() => {
         if (emailError || passError) {
@@ -52,15 +54,45 @@ function App() {
         }
     }
 
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault(); // Остановить перезагрузку страницы
+    //
+    //     try {
+    //         // Пример запроса на сервер для входа
+    //         const response = await axios.post('/api/login', { 'email', 'password' });
+    //
+    //         // Установка куки после успешного входа
+    //         if (response.data.token) {
+    //             setCookie(null, 'userToken', response.data.token, { path: '/' });
+    //             // Перенаправление на другую страницу после успешного входа
+    //             navigate('/dashboard'); // Замените '/dashboard' на нужный вам маршрут
+    //         }
+    //     } catch (error) {
+    //         console.error('Произошла ошибка при входе:', error);
+    //         setError('Неверный email или пароль. Пожалуйста, попробуйте еще раз.');
+    //     }
+    // };
+
+
     return (
         <header className="auntification">
             <h2 className="auntification__title">Вход в учётную запись</h2>
-            <form className="auntification__form">
+            <form onSubmit={handleSubmit} className="auntification__form">
                 {(emailDirty && emailError) && <div className="auntification__form_email-error" style={{color: 'red'}}>{emailError}</div>}
-                <input className="auntification__form_email" onChange={e => emailHandler(e)} value={email} onBlur={e => blurHandler(e)} name="email" type="text" placeholder="Почта"/>
+                <input className="auntification__form_email" onChange={e => emailHandler(e)} value={formData.email} onBlur={e => blurHandler(e)} name="email" type="text" placeholder="Почта"/>
                 {(passError && passDirty) && <div className="auntification__form_pass-error" style={{color: 'red'}}>{passError}</div>}
-                <input className="auntification__form_pass" onChange={e => passHandler(e)} value={pass} onBlur={e => blurHandler(e)} name="password" type="password" placeholder="Пароль"/>
-                <button className="auntification__form_button" disabled={!formValid} type="submit">Вход</button>
+                <input className="auntification__form_pass" onChange={e => passHandler(e)} value={formData.pass} onBlur={e => blurHandler(e)} name="password" type="password" placeholder="Пароль"/>
+                <button className="auntification__form_button" onChange={handleSubmit} disabled={!formValid} type="submit">Вход</button>
             </form>
         </header>
   );
