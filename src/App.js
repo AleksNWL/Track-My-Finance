@@ -53,16 +53,19 @@ function App() {
     }
 
     return (
-        <header className="auntification">
-            <h2 className="auntification__title">Вход в учётную запись</h2>
+        <div className="auntification__content">
+            <h2 className="auntification__title">Вход в учетную запись</h2>
             <form className="auntification__form">
                 {(emailDirty && emailError) && <div className="auntification__form_email-error" style={{color: 'red'}}>{emailError}</div>}
                 <input className="auntification__form_email" onChange={e => emailHandler(e)} value={email} onBlur={e => blurHandler(e)} name="email" type="text" placeholder="Почта"/>
                 {(passError && passDirty) && <div className="auntification__form_pass-error" style={{color: 'red'}}>{passError}</div>}
                 <input className="auntification__form_pass" onChange={e => passHandler(e)} value={pass} onBlur={e => blurHandler(e)} name="password" type="password" placeholder="Пароль"/>
-                <button className="auntification__form_button" disabled={!formValid} type="submit">Вход</button>
+                <div className="auntification__frame">
+                    <h3 className="auntification__frame_text"><a className="dd" href="/#">dggd</a>Регистрация</h3>
+                    <button className="auntification__form_button" disabled={!formValid} type="submit">Вход</button>
+                </div>
             </form>
-        </header>
+        </div>
   );
 }
 
