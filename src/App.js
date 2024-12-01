@@ -11,11 +11,11 @@ function App() {
     const [emailError, setEmailError] = useState('Почта не может быть пустой!');
     const [passError, setPassError] = useState('Пароль не может быть пустым!');
     const [formValid, setFormValid] = useState(false);
-    const [showPopup, setShowPopup] = useState(false); // Показывать popup
-    const [isLoginMode, setIsLoginMode] = useState(true); // Режим (вход или регистрация)
-    const [showResetPopup, setShowResetPopup] = useState(false); // Окно восстановления пароля
-    const [resetEmail, setResetEmail] = useState(''); // Email для восстановления
-    const [resetMessage, setResetMessage] = useState(''); // Сообщение после восстановления
+    const [showPopup, setShowPopup] = useState(false);
+    const [isLoginMode, setIsLoginMode] = useState(true);
+    const [showResetPopup, setShowResetPopup] = useState(false);
+    const [resetEmail, setResetEmail] = useState('');
+    const [resetMessage, setResetMessage] = useState('');
 
     useEffect(() => {
         if (emailError || passError) {
@@ -27,11 +27,6 @@ function App() {
 
     const emailHandler = (e) => {
         setEmail(e.target.value);
-        validateEmail(e.target.value);
-    };
-
-    const resetEmailHandler = (e) => {
-        setResetEmail(e.target.value);
         validateEmail(e.target.value);
     };
 
@@ -70,15 +65,15 @@ function App() {
     };
 
     const togglePopup = () => {
-        setShowPopup(!showPopup); // Переключение состояния показа
+        setShowPopup(!showPopup);
     };
 
     const switchToRegistration = () => {
-        setIsLoginMode(false); // Переключить на режим регистрации
+        setIsLoginMode(false);
     };
 
     const switchToLogin = () => {
-        setIsLoginMode(true); // Переключить на режим входа
+        setIsLoginMode(true);
     };
 
     const handleResetPassword = () => {
@@ -88,30 +83,42 @@ function App() {
         }
         setEmailError('');
         setResetMessage('Прочтите письмо на почте');
-        setShowPopup(false); // Закрыть основное окно (если оно открыто)
-        setShowResetPopup(false); // Закрыть окно восстановления
-        setTimeout(() => setResetMessage(''), 10000); // Очистить сообщение через 10 секунд
+        setShowResetPopup(false);
+        setTimeout(() => setResetMessage(''), 10000);
     };
+    
+    const resetEmailHandler = (e) => {
+        setResetEmail(e.target.value);
+        validateEmail(e.target.value);
+    };
+    
     
 
     return (
         <div>
-            <button className="open-popup-btn" onClick={togglePopup}>
-                Открыть Popup
-            </button>
+            <header class="header">
+                <h1 class="header__logo">Track My Finance</h1>
+                <button className="open-popup-btn" onClick={togglePopup} aria-label="Войти в профиль">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="profile-icon"
+                    >
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4a2 2 0 11-.001 4.001A2 2 0 0112 6zm0 14c-2.5 0-4.71-1.28-6-3.22.03-2 4-3.08 6-3.08s5.97 1.08 6 3.08C16.71 18.72 14.5 20 12 20z" />
+                    </svg>
+                </button>
+            </header>
 
             {showPopup && (
                 <div className="popup">
                     <div className="popup-content">
-                        <button className="popup__close-btn" onClick={togglePopup}>
-                            Закрыть
-                        </button>
                         {isLoginMode ? (
                             <div className="auntification__content">
+                                <button className="popup__close-btn" onClick={togglePopup}></button>
                                 <h2 className="auntification__title">Вход в учетную запись</h2>
                                 <form className="auntification__form">
-                                    {(emailDirty && emailError) && <div className="auntification__form_email-error" style={{ color: 'red' }}>{emailError}</div>}
-                                    <input className="auntification__form_email" onChange={emailHandler} value={email} onBlur={blurHandler} name="email" type="text" placeholder="Почта" />
+                                    <input className="auntification__form_login" onChange={(e) => setLogin(e.target.value)} value={login} name="login" type="text" placeholder="Логин" />
                                     {(passError && passDirty) && <div className="auntification__form_pass-error" style={{ color: 'red' }}>{passError}</div>}
                                     <input className="auntification__form_pass" onChange={passHandler} value={pass} onBlur={blurHandler} name="password" type="password" placeholder="Пароль" />
                                     <div className="auntification__frame">
@@ -150,6 +157,7 @@ function App() {
                             </div>
                         ) : (
                             <div className="registration__content">
+                                <button className="popup__close-btn" onClick={togglePopup}></button>
                                 <h2 className="registration__title">Регистрация</h2>
                                 <form className="registration__form">
                                     <input className="registration__form_login" onChange={(e) => setLogin(e.target.value)} value={login} name="login" type="text" placeholder="Логин" />
@@ -181,27 +189,32 @@ function App() {
                     </div>
                 </div>
             )}
-
             {showResetPopup && (
                 <div className="popup">
-                    <button className="popup__close-btn" onClick={() => setShowResetPopup(false)}>Закрыть</button>
-                    <div className="reset-password-content">
-                        <h2 className="reset-password__title">Восстановление пароля</h2>
-                        <input
-                            className="reset-password__input"
-                            type="text"
-                            placeholder="Введите email для восстановления"
-                            value={resetEmail}
-                            onChange={resetEmailHandler}
-                        />
-                        {emailError && <p style={{ color: "red" }}>{emailError}</p>}
-                        <button className="reset-password__submit-btn" onClick={handleResetPassword}>Восстановить</button>
+                    <div className="popup-content">
+                        <div className="reset-password-content">
+                            <button className="popup__close-btn" onClick={() => setShowResetPopup(false)}></button>
+                            <h2 className="reset-password__title">Восстановление пароля</h2>
+                            {(emailDirty && emailError) && <div className="auntification__form_email-error" style={{ color: 'red' }}>{emailError}</div>}
+                            <input
+                                className="auntification__form_email"
+                                onChange={resetEmailHandler}
+                                value={resetEmail}
+                                onBlur={blurHandler}
+                                name="email"
+                                type="text"
+                                placeholder="Почта"
+                            />
+                            <button
+                                className="reset-password__submit-btn"
+                                onClick={handleResetPassword}
+                                disabled={!resetEmail || emailError}
+                            >
+                                Восстановить
+                            </button>
+                        </div>
                     </div>
                 </div>
-            )}
-
-            {resetMessage && (
-                <p style={{ color: "green", marginTop: "20px" }}>{resetMessage}</p>
             )}
         </div>
     );
