@@ -13,6 +13,9 @@ function App() {
     const [formValid, setFormValid] = useState(false);
     const [showPopup, setShowPopup] = useState(false); // Показывать popup
     const [isLoginMode, setIsLoginMode] = useState(true); // Режим (вход или регистрация)
+    const [showResetPopup, setShowResetPopup] = useState(false); // Окно восстановления пароля
+    const [resetEmail, setResetEmail] = useState(''); // Email для восстановления
+    const [resetMessage, setResetMessage] = useState(''); // Сообщение после восстановления
 
     useEffect(() => {
         if (emailError || passError) {
@@ -24,9 +27,18 @@ function App() {
 
     const emailHandler = (e) => {
         setEmail(e.target.value);
+        validateEmail(e.target.value);
+    };
+
+    const resetEmailHandler = (e) => {
+        setResetEmail(e.target.value);
+        validateEmail(e.target.value);
+    };
+
+    const validateEmail = (email) => {
         const re = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
-        if (!re.test(String(e.target.value))) {
-            setEmailError('Некоректная почта');
+        if (!re.test(String(email))) {
+            setEmailError('Некорректная почта');
         } else {
             setEmailError('');
         }
@@ -69,6 +81,19 @@ function App() {
         setIsLoginMode(true); // Переключить на режим входа
     };
 
+    const handleResetPassword = () => {
+        if (!resetEmail || emailError) {
+            setEmailError('Введите корректный email');
+            return;
+        }
+        setEmailError('');
+        setResetMessage('Прочтите письмо на почте');
+        setShowPopup(false); // Закрыть основное окно (если оно открыто)
+        setShowResetPopup(false); // Закрыть окно восстановления
+        setTimeout(() => setResetMessage(''), 10000); // Очистить сообщение через 10 секунд
+    };
+    
+
     return (
         <div>
             <button className="open-popup-btn" onClick={togglePopup}>
@@ -78,7 +103,7 @@ function App() {
             {showPopup && (
                 <div className="popup">
                     <div className="popup-content">
-                        <button className="close-popup-btn" onClick={togglePopup}>
+                        <button className="popup__close-btn" onClick={togglePopup}>
                             Закрыть
                         </button>
                         {isLoginMode ? (
@@ -105,7 +130,21 @@ function App() {
                                             </h3>
                                             <button className="auntification__form_button" disabled={!formValid} type="submit">Вход</button>
                                         </div>
-                                        <h3 className="auntification__frame_lost-password">Забыли пароль? <a className="auntification__frame_link" href="/#">Восстановить</a></h3>
+                                        <h3 className="auntification__frame_lost-password">
+                                            Забыли пароль?{' '}
+                                            <a
+                                                className="auntification__frame_link"
+                                                href="/#"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setShowResetPopup(true);
+                                                    setShowPopup(false);
+                                                }}
+                                            >
+                                                Восстановить
+                                            </a>
+
+                                        </h3>
                                     </div>
                                 </form>
                             </div>
@@ -141,6 +180,28 @@ function App() {
                         )}
                     </div>
                 </div>
+            )}
+
+            {showResetPopup && (
+                <div className="popup">
+                    <button className="popup__close-btn" onClick={() => setShowResetPopup(false)}>Закрыть</button>
+                    <div className="reset-password-content">
+                        <h2 className="reset-password__title">Восстановление пароля</h2>
+                        <input
+                            className="reset-password__input"
+                            type="text"
+                            placeholder="Введите email для восстановления"
+                            value={resetEmail}
+                            onChange={resetEmailHandler}
+                        />
+                        {emailError && <p style={{ color: "red" }}>{emailError}</p>}
+                        <button className="reset-password__submit-btn" onClick={handleResetPassword}>Восстановить</button>
+                    </div>
+                </div>
+            )}
+
+            {resetMessage && (
+                <p style={{ color: "green", marginTop: "20px" }}>{resetMessage}</p>
             )}
         </div>
     );
