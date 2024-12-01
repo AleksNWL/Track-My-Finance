@@ -56,7 +56,7 @@ const DonutChart = () => {
         { name: "Категория 5", color: "#ffcc80" },
         { name: "Категория 6", color: "#90caf9" },
         { name: "Категория 7", color: "#ff8a65" },
-        { name: "Категория 8", color: "#a5d6a7" },
+        { name: "Категория 8", color: "#a5a6a7" },
         { name: "Категория 9", color: "#e0e0e0" },
         { name: "Категория 10", color: "#b39ddb" },
     ];
