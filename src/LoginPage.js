@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {BrowserRouter as Router, Routes, Route, useNavigate} from "react-router-dom";
 import '../src/styles/style.css';
@@ -73,7 +72,7 @@ const DonutChart = () => {
         setMonthIndex((prev) => (prev + 1) % months.length);
     };
 
-    const handleAddTransaction = () => {
+    const handleAddTransaction = async () => {
         if (!newTransaction.category || !newTransaction.description || !newTransaction.amount || !newTransaction.date) {
             alert('Все поля должны быть заполнены!');
             return;
@@ -93,8 +92,18 @@ const DonutChart = () => {
                 amount: parseFloat(newTransaction.amount),
                 date: newTransaction.date,
             });
+
             return updatedTransactions;
         });
+
+        const response = await axios.put("http://localhost:8080/api/transactions",{
+            amount: editTransaction.amount,
+            category: editTransaction.category,
+            date: editTransaction.date,
+            type: editTransaction.type,
+        });
+
+        alert(response.data);
         setNewTransaction({ type: 'income', category: '', description: '', amount: '', date: '' });
     };
 
@@ -644,7 +653,7 @@ function LoginPage() {
                                 <form className="auntification__form">
                                     {(emailDirty && emailError) && <div className="auntification__form_email-error"
                                                                         style={{color: 'red'}}>{emailError}</div>}
-                                    <input className="auntification__form_email" onChange={usernameHandler}
+                                    <input className="auntification__form_login" onChange={usernameHandler}
                                            value={login} onBlur={blurHandler} name="email" type="text"
                                            placeholder="Имя пользователя"/>
                                     {(passError && passDirty) && <div className="auntification__form_pass-error"

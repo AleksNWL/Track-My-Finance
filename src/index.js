@@ -11,7 +11,7 @@ root.render(
         <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/reset-password" element={<ResetPass />}></Route>
+            <Route path="/reset-password" element={<ResetPass />} />
         </Routes>
     </Router>
 );
