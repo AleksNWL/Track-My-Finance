@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import '../src/styles/style.css';
 
 function App() {
@@ -69,6 +70,31 @@ function App() {
         }
     };
 
+    const handleRegistration = async (e) => {
+        e.preventDefault();
+        if (!email || !pass || !login || pass !== confirmPass) {
+            alert('Пожалуйста, заполните все поля и убедитесь, что пароли совпадают');
+            return;
+        }
+
+        try {
+            const response = await axios.post('http://localhost:8080/api/v1/auth/register', {
+                username: login,
+                password: pass,
+                email: email,
+            });
+
+            alert(response.data.message); // Уведомление об успешной регистрации
+            switchToLogin(); // Переключиться на форму входа
+        } catch (error) {
+            if (error.response && error.response.status === 409) {
+                alert('Пользователь с таким email уже зарегистрирован');
+            } else {
+                console.error('Ошибка при регистрации:', error);
+            }
+        }
+    };
+
     const togglePopup = () => {
         setShowPopup(!showPopup); // Переключение состояния показа
     };
@@ -99,29 +125,23 @@ function App() {
         password: ''
     });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+    const handleLogin = async (e) => {
+        e.preventDefault();
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault(); // Остановить перезагрузку страницы
-    //
-    //     try {
-    //         // Пример запроса на сервер для входа
-    //         const response = await axios.post('/api/login', { 'email', 'password' });
-    //
-    //         // Установка куки после успешного входа
-    //         if (response.data.token) {
-    //             setCookie(null, 'userToken', response.data.token, { path: '/' });
-    //             // Перенаправление на другую страницу после успешного входа
-    //             navigate('/dashboard'); // Замените '/dashboard' на нужный вам маршрут
-    //         }
-    //     } catch (error) {
-    //         console.error('Произошла ошибка при входе:', error);
-    //         setError('Неверный email или пароль. Пожалуйста, попробуйте еще раз.');
-    //     }
-    // };
+        try {
+            const response = await axios.post('http://localhost:8080/api/v1/auth/login', {
+                email: email,
+                password: pass,
+            });
+            alert(response.data.message); // Уведомление об успешном входе
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+                alert('Ошибка  входа');
+            } else {
+                console.error('Ошибка при входе:', error);
+            }
+        }
+    };
 
 
     return (
@@ -141,7 +161,7 @@ function App() {
                                 <h2 className="auntification__title">Вход в учетную запись</h2>
                                 <form className="auntification__form">
                                     {(emailDirty && emailError) && <div className="auntification__form_email-error" style={{ color: 'red' }}>{emailError}</div>}
-                                    <input className="auntification__form_email" onChange={emailHandler} value={email} onBlur={blurHandler} name="email" type="text" placeholder="Почта" />
+                                    <input className="auntification__form_email" onChange={emailHandler} value={user} onBlur={blurHandler} name="email" type="text" placeholder="Почта" />
                                     {(passError && passDirty) && <div className="auntification__form_pass-error" style={{ color: 'red' }}>{passError}</div>}
                                     <input className="auntification__form_pass" onChange={passHandler} value={pass} onBlur={blurHandler} name="password" type="password" placeholder="Пароль" />
                                     <div className="auntification__frame">
@@ -158,7 +178,7 @@ function App() {
                                                     Регистрация
                                                 </a>
                                             </h3>
-                                            <button className="auntification__form_button" disabled={!formValid} type="submit">Вход</button>
+                                            <button className="auntification__form_button" onClick={handleLogin} disabled={!formValid} type="submit">Вход</button>
                                         </div>
                                         <h3 className="auntification__frame_lost-password">
                                             Забыли пароль?{' '}
@@ -190,7 +210,7 @@ function App() {
                                     <input className="registration__form_confirm-pass" onChange={(e) => setConfirmPass(e.target.value)} value={confirmPass} name="confirmPassword" type="password" placeholder="Повторите пароль" />
                                     <div className="registration__frame">
                                         <div className="registration__frame-inner">
-                                            <button className="registration__frame-inner_registration" disabled={!formValid || pass !== confirmPass} type="submit">
+                                            <button className="registration__frame-inner_registration" onClick={handleRegistration} disabled={!formValid || pass !== confirmPass} type="submit">
                                                 Зарегистрироваться
                                             </button>
                                             <a
