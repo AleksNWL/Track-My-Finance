@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Inter';
-    src: url("./fonts/Inter-Black.ttf");
+    src: url("../fonts/Inter-Black.ttf");
 }
 
 h1, h2, h3, p {
@@ -52,6 +52,7 @@ html {
 
 .popup {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     background-color: rgba(0, 0, 0, .5);
@@ -120,7 +121,7 @@ html {
 }
 
 .auntification__form_pass::placeholder {
-    font-size: 17px;
+    font-size: 16px;
 }
 
 input[type=text], input[type=password] {
@@ -173,9 +174,9 @@ input[type=text], input[type=password] {
     width: 150px;
     font-size: 20px;
     font-weight: bold;
+    color: white;
     background-color: rgb(16, 18, 66, .8);
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
-    color: white;
     justify-content: center;
     align-self: center;
     margin: 0;
@@ -218,6 +219,7 @@ input[type=text], input[type=password] {
 }
 
 .registration__title {
+    width: 338px;
     color: black;
     text-align: center;
     font-size: 24px;
@@ -231,6 +233,7 @@ input[type=text], input[type=password] {
     justify-content: center;
     max-width: 490px;
     align-self: center;
+    box-sizing: border-box;
 }
 
 .registration__form_login {
@@ -313,4 +316,15 @@ input[type=text], input[type=password] {
     font-size: 16px;
     color: black;
     opacity: 0.8;
+}
+
+
+.reset-password-content {
+    max-width: 430px;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 30px;
+    position: relative;
+    box-sizing: border-box;
+    padding: 34px 36px 10px;
 }
