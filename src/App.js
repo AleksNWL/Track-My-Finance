@@ -92,7 +92,37 @@ function App() {
         setShowResetPopup(false); // Закрыть окно восстановления
         setTimeout(() => setResetMessage(''), 10000); // Очистить сообщение через 10 секунд
     };
-    
+
+
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault(); // Остановить перезагрузку страницы
+    //
+    //     try {
+    //         // Пример запроса на сервер для входа
+    //         const response = await axios.post('/api/login', { 'email', 'password' });
+    //
+    //         // Установка куки после успешного входа
+    //         if (response.data.token) {
+    //             setCookie(null, 'userToken', response.data.token, { path: '/' });
+    //             // Перенаправление на другую страницу после успешного входа
+    //             navigate('/dashboard'); // Замените '/dashboard' на нужный вам маршрут
+    //         }
+    //     } catch (error) {
+    //         console.error('Произошла ошибка при входе:', error);
+    //         setError('Неверный email или пароль. Пожалуйста, попробуйте еще раз.');
+    //     }
+    // };
+
 
     return (
         <div>

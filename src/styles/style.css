@@ -174,9 +174,9 @@ input[type=text], input[type=password] {
     width: 150px;
     font-size: 20px;
     font-weight: bold;
+    color: white;
     background-color: rgb(16, 18, 66, .8);
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
-    color: white;
     justify-content: center;
     align-self: center;
     margin: 0;
@@ -246,7 +246,7 @@ input[type=text], input[type=password] {
 }
 
 .registration__form_email {
-    
+
     background-color: #ddd;
     height: 34px;
     border-radius: 10px;
@@ -256,7 +256,7 @@ input[type=text], input[type=password] {
 }
 
 .registration__form_pass {
-    
+
     background-color: #ddd;
     height: 34px;
     border-radius: 10px;
