@@ -10,7 +10,7 @@ function App() {
     const [emailError, setEmailError] = useState('Почта не может быть пустой!')
     const [passError, setPassError] = useState('Пароль не может быть пустым!')
     const [formValid, setFormValid] = useState(false)
-    const [cookies, setCookie] = useCookies(['userToken'])
+    const [cookies, setCookie] = useCookies(['userToken']) //wdqfqe
 
     useEffect(() => {
         if (emailError || passError) {
